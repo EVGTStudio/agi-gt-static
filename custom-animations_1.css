@@ -1,0 +1,13 @@
+/* =========================================================
+   agi.gt – Milchglas-Effekt für die Menüleiste beim Scrollen
+   Statt einer festen, deckenden Braunfarbe schimmert
+   der Hintergrund (Foto/Inhalt) leicht verschwommen durch.
+   ========================================================= */
+[style*="--sticky-overlaps-navigation-background-color"] {
+  --sticky-overlaps-navigation-background-color: rgba(180, 138, 97, 0.45) !important;
+}
+
+header.section-sticky {
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
