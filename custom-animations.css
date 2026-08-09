@@ -1,16 +1,24 @@
 /* =========================================================
-   agi.gt – Milchglas-Effekt für die Menüleiste beim Scrollen
-   Statt einer festen, deckenden Braunfarbe schimmert
-   der Hintergrund (Foto/Inhalt) leicht verschwommen durch.
+   agi.gt – "Liquid Glass" Effekt für die Menüleiste
+   Dunkles, sattes Glas mit feiner Lichtkante oben,
+   weichem Tiefenschatten und abgerundeten unteren Ecken —
+   angelehnt an iOS' "Liquid Glass"-Look.
    ========================================================= */
 [style*="--sticky-overlaps-navigation-background-color"] {
-  --sticky-overlaps-navigation-background-color: rgba(180, 138, 97, 0.45) !important;
+  --sticky-overlaps-navigation-background-color: rgba(16, 14, 13, 0.55) !important;
 }
 
 header.section-sticky {
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
-}
-header.section-sticky {
-  transition: background-color 0.5s ease, backdrop-filter 0.5s ease, -webkit-backdrop-filter 0.5s ease !important;
+  border-radius: 0 0 28px 28px !important;
+  overflow: hidden;
+  backdrop-filter: blur(26px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(26px) saturate(180%) !important;
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.25) !important;
+  transition:
+    background-color 0.5s ease,
+    backdrop-filter 0.5s ease,
+    box-shadow 0.5s ease !important;
 }
