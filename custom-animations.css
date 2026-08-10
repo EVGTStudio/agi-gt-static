@@ -5,7 +5,14 @@
    angelehnt an iOS' "Liquid Glass"-Look.
    ========================================================= */
 [style*="--sticky-overlaps-navigation-background-color"] {
-  --sticky-overlaps-navigation-background-color: rgba(16, 14, 13, 0.55) !important;
+  --sticky-overlaps-navigation-background-color: rgba(255, 250, 240, 0.35) !important;
+}
+
+/* Schatten hinter der Schrift, damit sie auf dem helleren Glas
+   trotzdem gut lesbar bleibt */
+header.section-sticky a,
+header.section-sticky .logo-text {
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55) !important;
 }
 
 header.section-sticky {
