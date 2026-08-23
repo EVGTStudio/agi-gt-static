@@ -181,3 +181,45 @@ header.section-root {
 .navigation-item:hover {
   color: #e8c98a !important;
 }
+
+/* =========================================================
+   MOBILE MENU FIX (nur < 768px, Desktop unangetastet)
+   Behebt zwei Darstellungsfehler im aufklappenden
+   Handy-Menü:
+
+   1) Oben/ungescrollt: Das Menü-Panel erschien nur über die
+      halbe Bildschirmbreite und schnitt Einträge wie
+      "ABOUT THE PROPERTY" rechts ab. Ursache: Die
+      Scroll-Reveal-Animation (Punkt 2 oben) setzt auf die
+      Header-Spalte aktive transform-/filter-Werte. Selbst
+      bei translateY(0)/blur(0) erzeugt das laut CSS-Spec
+      einen neuen "Containing Block" für position:fixed-
+      Elemente — das mobile Menü (intern position:fixed)
+      positioniert sich dann fälschlich relativ zu dieser
+      Spalte statt zum ganzen Bildschirm.
+
+   2) Gescrollt/gläsern: Das Menü wurde unten abgeschnitten,
+      weil header.section-sticky (weiter oben in dieser
+      Datei) overflow:hidden für die runden Ecken nutzt —
+      das klippt auch das aufklappende Menü.
+   ========================================================= */
+@media (max-width: 767.95px) {
+
+  /* Fix 1: Header-Inhalte aus der Enthüllen-Animation
+     ausnehmen, damit kein versehentlicher Containing Block
+     für das position:fixed Mobile-Menü entsteht. */
+  header.section-root .animated-element {
+    transform: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+    transition: none !important;
+  }
+
+  /* Fix 2: Im gläsernen Zustand nicht mehr clippen, solange
+     das Menü offen ist. Runde Ecken bleiben unverändert,
+     solange das Menü geschlossen ist. */
+  header.section-sticky:has(.navigation-menu-toggle-trigger:checked) {
+    overflow: visible !important;
+  }
+
+}
