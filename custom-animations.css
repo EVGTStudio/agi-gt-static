@@ -223,3 +223,33 @@ header.section-root {
   }
 
 }
+
+/* =========================================================
+   MOBILE MENU: PANEL BLEIBT SCHWARZ BEIM SCROLLEN
+   (nur < 768px, Desktop unangetastet)
+
+   Beim Scrollen schaltet die Seite die Navigations-Variablen
+   auf den durchscheinenden "Glas"-Look um; das mobile
+   Menü-Panel erbt diese Variablen mit. Hier setzen wir sie
+   zurück auf die ursprünglichen Schwarz/Weiß-Werte, sobald
+   das Menü aufgeklappt ist — unabhängig davon, ob der Header
+   gerade im gescrollten (section-sticky) Zustand ist. Der
+   schmale Header-Balken (Logo + Hamburger-Icon) bleibt davon
+   unberührt und zeigt weiterhin den gläsernen Scroll-Effekt.
+   ========================================================= */
+@media (max-width: 767.95px) {
+
+  .navigation-root:has(.navigation-menu-toggle-trigger:checked) {
+    --navigation-background-color: #000000 !important;
+    --navigation-color: #fef9fa !important;
+    --navigation-background-color-active: rgba(132, 116, 101, 0.1) !important;
+    --navigation-background-color-active-second: rgba(132, 116, 101, 0.05) !important;
+    --navigation-active-color: #847465 !important;
+    --navigation-contrast-color: #ffffff !important;
+  }
+
+  .navigation-root:has(.navigation-menu-toggle-trigger:checked) .navigation-list {
+    background-color: #000 !important;
+  }
+
+}
