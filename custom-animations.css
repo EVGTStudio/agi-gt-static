@@ -324,6 +324,7 @@ a.agi-contact-value:focus-visible {
    ========================================================= */
 :root {
   --agi-nav-progress: 0;
+  --agi-nav-blur: 14px;
 }
 
 [style*="--sticky-overlaps-navigation-background-color"] {
@@ -331,12 +332,13 @@ a.agi-contact-value:focus-visible {
 }
 
 header.section-sticky {
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
+  backdrop-filter: blur(var(--agi-nav-blur)) !important;
+  -webkit-backdrop-filter: blur(var(--agi-nav-blur)) !important;
+  transition: backdrop-filter 0.1s linear, -webkit-backdrop-filter 0.1s linear;
 }
 
 .navigation-root.navigation {
-  transition: padding 0.2s ease;
+  transition: background-color 0.1s linear;
 }
 
 /* =========================================================
