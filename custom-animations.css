@@ -1,255 +1,274 @@
 /* =========================================================
-   agi.gt – "Liquid Glass" Effekt für die Menüleiste
-   Dunkles, sattes Glas mit feiner Lichtkante oben,
-   weichem Tiefenschatten und abgerundeten unteren Ecken —
-   angelehnt an iOS' "Liquid Glass"-Look.
+   agi.gt – Milchglas-Effekt für die Menüleiste beim Scrollen
+   Statt einer festen, deckenden Braunfarbe schimmert
+   der Hintergrund (Foto/Inhalt) leicht verschwommen durch.
    ========================================================= */
 [style*="--sticky-overlaps-navigation-background-color"] {
-  --sticky-overlaps-navigation-background-color: rgba(255, 250, 240, 0.35) !important;
-}
-
-/* Schatten hinter der Schrift, damit sie auf dem helleren Glas
-   trotzdem gut lesbar bleibt */
-header.section-sticky a,
-header.section-sticky .logo-text {
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55) !important;
+  --sticky-overlaps-navigation-background-color: rgba(180, 138, 97, 0.45) !important;
 }
 
 header.section-sticky {
-  border-radius: 0 0 28px 28px !important;
-  overflow: hidden;
-  backdrop-filter: blur(26px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(26px) saturate(180%) !important;
-  box-shadow:
-    0 12px 32px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.25) !important;
-  transition:
-    background-color 0.5s ease,
-    backdrop-filter 0.5s ease,
-    box-shadow 0.5s ease !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
 }
 
 /* =========================================================
-   MYSTISCHES SEEHAUS — Atmosphäre-Effekte
-   Nebel-Textur, sanftes Enthüllen, goldener Glanz,
-   passend zu einem alten, geheimnisvollen Anwesen
-   am Lago de Atitlán.
+   agi.gt – Kontaktbereich
+   Das Kontaktformular wurde durch eine ruhige, typografische
+   Kontaktkarte ersetzt. Palette und Schriften folgen dem
+   Rest der Seite: Cormorant Garamond für Überschriften,
+   Quicksand für Fließtext, Akzent #e5c2a2 auf Braun #574533.
    ========================================================= */
 
-/* Respektiert Nutzer, die Animationen reduziert haben wollen */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation: none !important;
-    transition: none !important;
-  }
+/* --- Sicherheitsnetz: Kontaktformulare seitenweit ausblenden --- */
+.module-container-root .form-container,
+.module-container-root form.form-form {
+  display: none !important;
 }
 
-/* -----------------------------------------
-   1) NEBEL/FILM-KORN — dezente, körnige
-   Textur über der ganzen Seite, wie leichter
-   Dunst über dem See in der Dämmerung.
-   ----------------------------------------- */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 999;
-  opacity: 0.045;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation: mistDrift 0.8s steps(2) infinite;
-}
+/* --- Farb- und Maßvariablen des Kontaktbereichs --- */
+.agi-contact-card {
+  --agi-ink: #fef9fa;
+  --agi-accent: #e5c2a2;
+  --agi-dark: #574533;
+  --agi-hairline: rgba(254, 249, 250, 0.22);
 
-@keyframes mistDrift {
-  0% { transform: translate(0, 0); }
-  50% { transform: translate(-1%, 1%); }
-  100% { transform: translate(1%, -1%); }
-}
-
-/* -----------------------------------------
-   2) SANFTES ENTHÜLLEN beim Scrollen
-   Inhalte kommen leicht verschwommen und
-   versetzt ins Bild, statt hart einzublenden.
-   ----------------------------------------- */
-.animated-element,
-.section-root {
-  opacity: 0;
-  transform: translateY(26px);
-  filter: blur(6px);
-  transition: opacity 1s ease, transform 1s ease, filter 1s ease;
-}
-
-header.section-root {
-  opacity: 1;
-  transform: none;
-  filter: none;
-  transition: none;
-}
-
-.animated-element.is-visible,
-.section-root.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-  filter: blur(0);
-}
-
-/* Überschriften: eigener, etwas langsamerer Enthüllungs-Moment */
-.section-root.is-visible h1,
-.section-root.is-visible h2,
-.section-root.is-visible h3 {
-  animation: headingReveal 1.3s ease both;
-}
-
-@keyframes headingReveal {
-  from {
-    opacity: 0;
-    filter: blur(10px);
-    letter-spacing: 0.12em;
-  }
-  to {
-    opacity: 1;
-    filter: blur(0);
-    letter-spacing: normal;
-  }
-}
-
-/* -----------------------------------------
-   3) BILDER — ruhiger, edler Zoom bei Hover
-   ----------------------------------------- */
-.image-wrapper,
-.image-container {
-  overflow: hidden;
-}
-
-.image-img {
-  transition: transform 1.1s cubic-bezier(.22,.61,.36,1), filter .6s ease;
-}
-
-.image-wrapper:hover .image-img,
-.image-container:hover .image-img {
-  transform: scale(1.07);
-  filter: brightness(1.05) saturate(1.08);
-}
-
-/* -----------------------------------------
-   4) GOLDENER GLANZ-SWEEP auf Buttons
-   Wie Kerzenschein, der über altes Holz
-   oder poliertes Messing streift.
-   ----------------------------------------- */
-.button-button {
   position: relative;
-  overflow: hidden;
-  transition: transform .35s ease, box-shadow .35s ease;
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 8px 0 12px;
+  color: var(--agi-ink);
+  font-family: Quicksand, sans-serif;
+  text-align: left;
 }
 
-.button-button::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -60%;
-  width: 45%;
+/* Feine Zierlinie über der Karte */
+.agi-contact-ornament {
+  display: block;
+  width: 56px;
+  height: 1px;
+  margin-bottom: 22px;
+  background: linear-gradient(to right, var(--agi-accent), rgba(229, 194, 162, 0));
+}
+
+.agi-contact-kicker {
+  margin: 0 0 6px;
+  font-family: Quicksand, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--agi-accent);
+  opacity: 0.95;
+}
+
+.agi-contact-title {
+  margin: 0 0 26px;
+  font-family: CormorantGaramond, "Cormorant Garamond", Georgia, serif;
+  font-size: 44px;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--agi-ink);
+}
+
+/* --- Liste der Kontaktdaten --- */
+.agi-contact-list {
+  list-style: none;
+  margin: 0 0 30px;
+  padding: 0;
+}
+
+.agi-contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-top: 1px solid var(--agi-hairline);
+}
+
+.agi-contact-item:last-child {
+  border-bottom: 1px solid var(--agi-hairline);
+}
+
+.agi-contact-icon {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  margin-top: 6px;
+  color: var(--agi-accent);
+  opacity: 0.9;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.agi-contact-icon svg {
+  display: block;
+  width: 100%;
   height: 100%;
-  background: linear-gradient(
-    100deg,
-    transparent,
-    rgba(255, 223, 165, 0.55),
-    transparent
-  );
-  transform: skewX(-20deg);
-  transition: left .7s cubic-bezier(.22,.61,.36,1);
-  pointer-events: none;
 }
 
-.button-button:hover::before {
-  left: 130%;
+.agi-contact-item:hover .agi-contact-icon {
+  opacity: 1;
+  transform: translateY(-1px);
 }
 
-.button-button:hover {
+.agi-contact-body {
+  display: block;
+  min-width: 0;
+}
+
+.agi-contact-label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--agi-ink);
+  opacity: 0.6;
+}
+
+.agi-contact-value {
+  display: inline-block;
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--agi-ink);
+  text-decoration: none;
+  word-break: break-word;
+}
+
+/* Dezent unterstrichener Link, der beim Hover aufblüht */
+a.agi-contact-value {
+  background-image: linear-gradient(var(--agi-accent), var(--agi-accent));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0 1px;
+  transition: background-size 0.4s ease, color 0.3s ease;
+}
+
+a.agi-contact-value:hover,
+a.agi-contact-value:focus-visible {
+  color: var(--agi-accent);
+  background-size: 100% 1px;
+}
+
+.agi-contact-value-static {
+  font-weight: 400;
+}
+
+.agi-contact-note {
+  display: block;
+  margin-top: 3px;
+  font-size: 13px;
+  font-style: italic;
+  letter-spacing: 0.3px;
+  color: var(--agi-ink);
+  opacity: 0.65;
+}
+
+/* --- Buttons --- */
+.agi-contact-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.agi-contact-btn {
+  display: inline-block;
+  padding: 13px 26px;
+  font-family: Quicksand, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  line-height: 1.6;
+  text-transform: uppercase;
+  text-decoration: none;
+  text-align: center;
+  border: 1px solid var(--agi-accent);
+  transition: background-color 0.35s ease, color 0.35s ease, transform 0.35s ease;
+}
+
+.agi-contact-btn-primary {
+  background-color: var(--agi-accent);
+  color: #151515;
+}
+
+.agi-contact-btn-primary:hover,
+.agi-contact-btn-primary:focus-visible {
+  background-color: transparent;
+  color: var(--agi-accent);
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
 }
 
-/* -----------------------------------------
-   5) NAVIGATION — warmer Hover statt Standard
-   ----------------------------------------- */
-.navigation-item {
-  transition: color .35s ease, transform .35s ease;
+.agi-contact-btn-ghost {
+  background-color: transparent;
+  color: var(--agi-accent);
 }
 
-.navigation-item:hover {
-  color: #e8c98a !important;
+.agi-contact-btn-ghost:hover,
+.agi-contact-btn-ghost:focus-visible {
+  background-color: var(--agi-accent);
+  color: #151515;
+  transform: translateY(-2px);
 }
 
-/* =========================================================
-   MOBILE MENU FIX (nur < 768px, Desktop unangetastet)
-   Behebt zwei Darstellungsfehler im aufklappenden
-   Handy-Menü:
-
-   1) Oben/ungescrollt: Das Menü-Panel erschien nur über die
-      halbe Bildschirmbreite und schnitt Einträge wie
-      "ABOUT THE PROPERTY" rechts ab. Ursache: Die
-      Scroll-Reveal-Animation (Punkt 2 oben) setzt auf die
-      Header-Spalte aktive transform-/filter-Werte. Selbst
-      bei translateY(0)/blur(0) erzeugt das laut CSS-Spec
-      einen neuen "Containing Block" für position:fixed-
-      Elemente — das mobile Menü (intern position:fixed)
-      positioniert sich dann fälschlich relativ zu dieser
-      Spalte statt zum ganzen Bildschirm.
-
-   2) Gescrollt/gläsern: Das Menü wurde unten abgeschnitten,
-      weil header.section-sticky (weiter oben in dieser
-      Datei) overflow:hidden für die runden Ecken nutzt —
-      das klippt auch das aufklappende Menü.
-   ========================================================= */
-@media (max-width: 767.95px) {
-
-  /* Fix 1: Header-Inhalte aus der Enthüllen-Animation
-     ausnehmen, damit kein versehentlicher Containing Block
-     für das position:fixed Mobile-Menü entsteht. */
-  header.section-root .animated-element {
-    transform: none !important;
-    filter: none !important;
-    opacity: 1 !important;
-    transition: none !important;
-  }
-
-  /* Fix 2: Im gläsernen Zustand nicht mehr clippen, solange
-     das Menü offen ist. Runde Ecken bleiben unverändert,
-     solange das Menü geschlossen ist. */
-  header.section-sticky:has(.navigation-menu-toggle-trigger:checked) {
-    overflow: visible !important;
-  }
-
+/* --- Panel (rechte Spalte) etwas luftiger --- */
+.agi-contact-panel {
+  padding: 56px 8px !important;
 }
 
-/* =========================================================
-   MOBILE MENU: PANEL BLEIBT SCHWARZ BEIM SCROLLEN
-   (nur < 768px, Desktop unangetastet)
+/* Der Einleitungstext über der Karte bekommt etwas Luft */
+.agi-contact-panel h3 {
+  line-height: 1.45 !important;
+  margin-bottom: 8px;
+}
 
-   Beim Scrollen schaltet die Seite die Navigations-Variablen
-   auf den durchscheinenden "Glas"-Look um; das mobile
-   Menü-Panel erbt diese Variablen mit. Hier setzen wir sie
-   zurück auf die ursprünglichen Schwarz/Weiß-Werte, sobald
-   das Menü aufgeklappt ist — unabhängig davon, ob der Header
-   gerade im gescrollten (section-sticky) Zustand ist. Der
-   schmale Header-Balken (Logo + Hamburger-Icon) bleibt davon
-   unberührt und zeigt weiterhin den gläsernen Scroll-Effekt.
-   ========================================================= */
-@media (max-width: 767.95px) {
+.agi-contact-panel h3 p + p {
+  margin-top: 12px;
+}
 
-  .navigation-root:has(.navigation-menu-toggle-trigger:checked) {
-    --navigation-background-color: #000000 !important;
-    --navigation-color: #fef9fa !important;
-    --navigation-background-color-active: rgba(132, 116, 101, 0.1) !important;
-    --navigation-background-color-active-second: rgba(132, 116, 101, 0.05) !important;
-    --navigation-active-color: #847465 !important;
-    --navigation-contrast-color: #ffffff !important;
+/* --- Bildspalte: Foto füllt die volle Höhe der Zeile --- */
+@media (min-width: 768px) {
+  .agi-contact-visual .image-wrapper {
+    height: 100%;
+    padding-bottom: 0 !important;
+    min-height: 520px;
   }
 
-  .navigation-root:has(.navigation-menu-toggle-trigger:checked) .navigation-list {
-    background-color: #000 !important;
+  .agi-contact-visual .image-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+/* --- Mobil --- */
+@media (max-width: 767px) {
+  .agi-contact-panel {
+    padding: 40px 8px !important;
   }
 
+  .agi-contact-title {
+    font-size: 36px;
+  }
+
+  .agi-contact-value {
+    font-size: 18px;
+  }
+
+  .agi-contact-actions {
+    flex-direction: column;
+  }
+
+  .agi-contact-btn {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .agi-contact-btn,
+  .agi-contact-icon,
+  a.agi-contact-value {
+    transition: none;
+  }
 }
