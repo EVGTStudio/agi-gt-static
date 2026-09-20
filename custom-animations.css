@@ -352,3 +352,16 @@ header.section-sticky {
   pointer-events: none;
   transition: opacity 0.15s linear;
 }
+
+/* =========================================================
+   agi.gt – Übersetzer-Widget: kein "EN" mehr vor jedem Code
+   Das Flaggen-Icon für die Ausgangssprache (Englisch) lädt
+   auf dem neuen Server offenbar nicht mehr; der Browser zeigt
+   dann ersatzweise dessen Alt-Text "EN" an. Diese Regel blendet
+   nur genau dieses eine Icon aus – die Sprachcodes (DE, NL, ...)
+   bleiben unangetastet sichtbar.
+   ========================================================= */
+img[src*="/wp-content/plugins/website-translator/flags/"][alt="EN" i],
+img[src*="wp-content/plugins/website-translator/flags/"][alt="EN" i] {
+  display: none !important;
+}
