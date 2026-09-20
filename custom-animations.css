@@ -272,3 +272,87 @@ a.agi-contact-value:focus-visible {
     transition: none;
   }
 }
+
+/* =========================================================
+   agi.gt – Cookie-/Consent-Banner
+   Banner, Privacy-Popup und Modul-Blocker sind aus dem HTML
+   entfernt. Diese Regeln greifen zusätzlich auf allen Seiten,
+   die noch nicht neu hochgeladen wurden.
+   ========================================================= */
+.consent-banner-root,
+.privacy-settings-root,
+.privacy-settings-popup-container,
+.page-blocker-root,
+#pbModal,
+.module-blocker-root,
+.module-blocker-backdrop {
+  display: none !important;
+}
+
+/* Falls ein Video noch vom Blocker versteckt wird: sichtbar machen */
+.video-module-root.module-blocker-consent-video-hidden {
+  display: block !important;
+}
+
+/* --- Direkt eingebettetes Video (16:9, responsiv) --- */
+.agi-video {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background-color: #151515;
+}
+
+.agi-video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* =========================================================
+   agi.gt – Menüleiste: progressiv statt an/aus
+   Die Werte aus --agi-nav-progress (0 bis 1) kommen aus
+   custom-animations.js und wachsen mit der Scrolltiefe.
+   ========================================================= */
+:root {
+  --agi-nav-progress: 0;
+}
+
+/* Der Hintergrund wird zunehmend transparenter (0.45 -> 0.12) */
+[style*="--sticky-overlaps-navigation-background-color"] {
+  --sticky-overlaps-navigation-background-color: rgba(180, 138, 97, calc(0.45 - 0.33 * var(--agi-nav-progress))) !important;
+}
+
+header.section-sticky {
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+
+/* Die Leiste wird beim Scrollen etwas kompakter/schmaler.
+   Mehrere Ziel-Elemente, falls das Theme die Innenabstände
+   an unterschiedlicher Stelle setzt – ungefährlich, falls
+   eines davon im Theme nicht existiert. */
+header.section-sticky .navigation-wrapper,
+header.section-sticky .navigation-root,
+header.section-sticky .section-inner {
+  padding-top: calc(var(--agi-nav-pad, 18px) * (1 - 0.4 * var(--agi-nav-progress)));
+  padding-bottom: calc(var(--agi-nav-pad, 18px) * (1 - 0.4 * var(--agi-nav-progress)));
+  transition: padding 0.2s ease;
+}
+
+/* =========================================================
+   agi.gt – Titelbild (Seehaus): dunkle Abblendung wird beim
+   Scrollen langsam heller. custom-animations.js steuert die
+   Deckkraft dieser Ebene über die Session hinweg.
+   ========================================================= */
+#agi-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: #000;
+  opacity: 0.6;
+  pointer-events: none;
+  transition: opacity 0.15s linear;
+}
