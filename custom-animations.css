@@ -356,14 +356,14 @@ header.section-sticky {
 }
 
 /* =========================================================
-   agi.gt – Übersetzer-Widget: kein "EN" mehr vor jedem Code
-   Das Flaggen-Icon für die Ausgangssprache (Englisch) lädt
-   auf dem neuen Server offenbar nicht mehr; der Browser zeigt
-   dann ersatzweise dessen Alt-Text "EN" an. Diese Regel blendet
-   nur genau dieses eine Icon aus – die Sprachcodes (DE, NL, ...)
-   bleiben unangetastet sichtbar.
+   agi.gt – Übersetzer-Widget: nur noch EIN Sprachcode
+   Jeder Eintrag zeigt zwei Dinge nebeneinander: ein Flaggen-
+   Bild (das auf diesem Server nicht lädt und dann als Text
+   wie "EN" oder "DE" durchscheint) und einen eigenen Text-
+   Span mit dem Sprachcode (.iwt-lang-code), der ohnehin
+   korrekt lesbar ist. Wir blenden nur das Bild aus – übrig
+   bleibt genau ein sauberer Code wie "DE" oder "NL".
    ========================================================= */
-img[src*="/wp-content/plugins/website-translator/flags/"][alt="EN" i],
-img[src*="wp-content/plugins/website-translator/flags/"][alt="EN" i] {
+#iwt_float_wrapper img {
   display: none !important;
 }
