@@ -1,25 +1,28 @@
 /* =========================================================
    agi.gt – Scroll-Effekte
-   1) Menüleiste: wird beim Herunterscrollen zunehmend
-      durchsichtiger und etwas kompakter/schmaler.
+   1) Menüleiste: das milchige Glas wird beim Herunterscrollen
+      zunehmend klarer – Farbe UND Weichzeichner nehmen ab –
+      bis es nach ~340px ganz klares (unsichtbares) Glas ist.
    2) Titelbild (Seehaus): die dunkle Abblendung hellt sich
-      beim Herunterscrollen langsam auf und bleibt hell,
-      auch wenn man wieder nach oben scrollt. Erst ein
-      erneuter Seitenaufruf setzt sie zurück.
+      beim Herunterscrollen langsam auf und bleibt hell, auch
+      wenn man wieder nach oben scrollt. Erst ein erneuter
+      Seitenaufruf setzt sie zurück.
+   3) Übersetzer-Widget: wird beim Laden automatisch freige-
+      schaltet, ohne dass dafür ein Cookie-Banner nötig ist.
 
-   Hinweis zur Umsetzung: Die Menüleiste wird bewusst direkt
-   per JavaScript eingefärbt/verkleinert (nicht nur per CSS-
-   Variable), damit unser Effekt unabhängig von der eigenen
-   Farblogik der Seiten-Software zuverlässig funktioniert.
+   Hinweis: Die Menüleiste wird bewusst direkt per JavaScript
+   eingefärbt (nicht nur per CSS-Variable), damit der Effekt
+   unabhängig von der eigenen Farblogik der Seiten-Software
+   zuverlässig funktioniert.
    ========================================================= */
 (function () {
   'use strict';
 
-  var NAV_FADE_DISTANCE = 320;
-  var NAV_ALPHA_START = 0.45;
-  var NAV_ALPHA_END = 0.10;
-  var NAV_PAD_START = 18;
-  var NAV_PAD_END = 9;
+  var NAV_FADE_DISTANCE = 340; // Scroll-Strecke bis "ganz klares Glas"
+  var NAV_ALPHA_START = 0.45;  // milchig
+  var NAV_ALPHA_END = 0;       // ganz klar
+  var NAV_BLUR_START = 14;     // px
+  var NAV_BLUR_END = 0;        // px
 
   var navEl = null;
   var heroMaxProgress = 0;
@@ -36,23 +39,23 @@
   function updateEffects() {
     var y = window.scrollY || window.pageYOffset || 0;
 
+    // --- Menüleiste ---
     var navProgress = Math.min(Math.max(y / NAV_FADE_DISTANCE, 0), 1);
     document.documentElement.style.setProperty('--agi-nav-progress', navProgress.toFixed(3));
+
+    var blur = (NAV_BLUR_START - (NAV_BLUR_START - NAV_BLUR_END) * navProgress).toFixed(2);
+    document.documentElement.style.setProperty('--agi-nav-blur', blur + 'px');
 
     if (navEl) {
       if (y > 0) {
         var alpha = (NAV_ALPHA_START - (NAV_ALPHA_START - NAV_ALPHA_END) * navProgress).toFixed(3);
-        var pad = (NAV_PAD_START - (NAV_PAD_START - NAV_PAD_END) * navProgress).toFixed(1);
         navEl.style.setProperty('--navigation-background-color', 'rgba(180, 138, 97, ' + alpha + ')');
-        navEl.style.setProperty('padding-top', pad + 'px');
-        navEl.style.setProperty('padding-bottom', pad + 'px');
       } else {
         navEl.style.removeProperty('--navigation-background-color');
-        navEl.style.removeProperty('padding-top');
-        navEl.style.removeProperty('padding-bottom');
       }
     }
 
+    // --- Titelbild ---
     var overlay = document.getElementById('agi-hero-overlay');
     if (overlay) {
       var heroProgress = Math.min(Math.max(y / heroFadeDistance, 0), 1);
@@ -62,11 +65,8 @@
   }
 
   // --- Übersetzer-Widget ---
-  // Das Übersetzer-Icon war bisher hinter einem Cookie-Consent
-  // versteckt: erst nach "Akzeptieren" im (jetzt entfernten) Banner
-  // wurde die Übersetzungsfunktion tatsächlich freigeschaltet. Da es
-  // keinen Banner mehr gibt, schalten wir sie hier einmalig direkt
-  // frei – ganz ohne Pop-up für den Besucher.
+  // War bisher hinter einem Cookie-Consent versteckt; ohne Banner
+  // schalten wir es hier einmalig direkt frei, ganz ohne Pop-up.
   function unlockTranslator() {
     try {
       if (
