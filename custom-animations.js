@@ -1,59 +1,55 @@
 /* =========================================================
-   agi.gt – Scroll-Enthüllung
-   Beobachtet Sections/Elemente und blendet sie sanft ein,
-   sobald sie beim Scrollen ins sichtbare Fenster kommen.
+   agi.gt – Scroll-Effekte
+   1) Menüleiste: wird beim Herunterscrollen zunehmend
+      durchsichtiger und etwas schmaler (kompakter).
+   2) Titelbild (Seehaus): die dunkle Abblendung hellt sich
+      beim Herunterscrollen langsam auf und bleibt hell,
+      auch wenn man wieder nach oben scrollt. Erst ein
+      erneuter Seitenaufruf setzt sie zurück.
    ========================================================= */
 (function () {
-  "use strict";
+  'use strict';
 
-  var reduceMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-  ).matches;
+  // Wie viele Pixel Scroll-Strecke, bis die Leiste ihren
+  // "fertigen" Zustand (am transparentesten/schmalsten) erreicht.
+  var NAV_FADE_DISTANCE = 320;
 
-  function revealAll() {
-    document
-      .querySelectorAll(".animated-element, .section-root")
-      .forEach(function (el) {
-        el.classList.add("is-visible");
-      });
+  // Session-Maximum: brennt sich nur in Richtung "heller" ein,
+  // geht beim Zurückscrollen nicht wieder dunkler.
+  var heroMaxProgress = 0;
+  var heroFadeDistance = 0;
+
+  function cacheHeroDistance() {
+    var hero = document.getElementById('Home');
+    heroFadeDistance = (hero && hero.offsetHeight) || window.innerHeight || 800;
   }
 
-  if (reduceMotion || !("IntersectionObserver" in window)) {
-    revealAll();
-    return;
-  }
+  function updateEffects() {
+    var y = window.scrollY || window.pageYOffset || 0;
 
-  var observer = new IntersectionObserver(
-    function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    {
-      root: null,
-      rootMargin: "0px 0px -80px 0px",
-      threshold: 0.1,
+    // --- Menüleiste ---
+    var navProgress = Math.min(Math.max(y / NAV_FADE_DISTANCE, 0), 1);
+    document.documentElement.style.setProperty('--agi-nav-progress', navProgress.toFixed(3));
+
+    // --- Titelbild ---
+    var overlay = document.getElementById('agi-hero-overlay');
+    if (overlay) {
+      if (!heroFadeDistance) cacheHeroDistance();
+      var heroProgress = Math.min(Math.max(y / heroFadeDistance, 0), 1);
+      if (heroProgress > heroMaxProgress) heroMaxProgress = heroProgress;
+      overlay.style.opacity = (0.6 * (1 - heroMaxProgress)).toFixed(3);
     }
-  );
-
-  function initObserver() {
-    document
-      .querySelectorAll(".animated-element, .section-root")
-      .forEach(function (el) {
-        observer.observe(el);
-      });
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initObserver);
-  } else {
-    initObserver();
-  }
+  document.addEventListener('DOMContentLoaded', cacheHeroDistance);
+  window.addEventListener('load', function () {
+    cacheHeroDistance();
+    updateEffects();
+  });
+  window.addEventListener('resize', cacheHeroDistance, { passive: true });
+  window.addEventListener('scroll', updateEffects, { passive: true });
 
-  // Sicherheitsnetz: falls nach 3 Sekunden Elemente aus irgendeinem
-  // Grund nicht animiert wurden, trotzdem einblenden.
-  setTimeout(revealAll, 3000);
+  // Direkt einmal ausführen, falls die Seite mit Scroll-Position
+  // neu geladen wird (z. B. per Browser-Zurück).
+  updateEffects();
 })();
