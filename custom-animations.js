@@ -61,10 +61,32 @@
     }
   }
 
+  // --- Übersetzer-Widget ---
+  // Das Übersetzer-Icon war bisher hinter einem Cookie-Consent
+  // versteckt: erst nach "Akzeptieren" im (jetzt entfernten) Banner
+  // wurde die Übersetzungsfunktion tatsächlich freigeschaltet. Da es
+  // keinen Banner mehr gibt, schalten wir sie hier einmalig direkt
+  // frei – ganz ohne Pop-up für den Besucher.
+  function unlockTranslator() {
+    try {
+      if (
+        window.CONSENT_REGISTRY &&
+        window.CONSENT_REGISTRY.websiteTranslator &&
+        window.CONSENT_REGISTRY.websiteTranslator.websiteTranslatorModule &&
+        typeof window.CONSENT_REGISTRY.websiteTranslator.websiteTranslatorModule.consentAction === 'function'
+      ) {
+        window.CONSENT_REGISTRY.websiteTranslator.websiteTranslatorModule.consentAction();
+      }
+    } catch (e) {
+      /* still fine if this fails – widget just stays as-is */
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', cacheElements);
   window.addEventListener('load', function () {
     cacheElements();
     updateEffects();
+    unlockTranslator();
   });
   window.addEventListener('resize', cacheElements, { passive: true });
   window.addEventListener('scroll', updateEffects, { passive: true });
