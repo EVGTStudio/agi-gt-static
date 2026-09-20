@@ -313,17 +313,21 @@ a.agi-contact-value:focus-visible {
 }
 
 /* =========================================================
-   agi.gt – Menüleiste: progressiv statt an/aus
-   Die Werte aus --agi-nav-progress (0 bis 1) kommen aus
-   custom-animations.js und wachsen mit der Scrolltiefe.
+   agi.gt – Menüleiste (Basis + weiche Übergänge)
+   Die eigentliche Progressivität (immer durchsichtiger und
+   kompakter je tiefer man scrollt) wird direkt von
+   custom-animations.js gesteuert – zuverlässiger, als sich
+   auf die interne Farblogik der Seiten-Software zu verlassen.
+   Diese Regeln liefern nur die statische Grundfarbe (falls
+   JavaScript einmal nicht laufen sollte) und sorgen für ein
+   sanftes Angleiten statt harter Sprünge.
    ========================================================= */
 :root {
   --agi-nav-progress: 0;
 }
 
-/* Der Hintergrund wird zunehmend transparenter (0.45 -> 0.12) */
 [style*="--sticky-overlaps-navigation-background-color"] {
-  --sticky-overlaps-navigation-background-color: rgba(180, 138, 97, calc(0.45 - 0.33 * var(--agi-nav-progress))) !important;
+  --sticky-overlaps-navigation-background-color: rgba(180, 138, 97, 0.45) !important;
 }
 
 header.section-sticky {
@@ -331,15 +335,7 @@ header.section-sticky {
   -webkit-backdrop-filter: blur(14px) !important;
 }
 
-/* Die Leiste wird beim Scrollen etwas kompakter/schmaler.
-   Mehrere Ziel-Elemente, falls das Theme die Innenabstände
-   an unterschiedlicher Stelle setzt – ungefährlich, falls
-   eines davon im Theme nicht existiert. */
-header.section-sticky .navigation-wrapper,
-header.section-sticky .navigation-root,
-header.section-sticky .section-inner {
-  padding-top: calc(var(--agi-nav-pad, 18px) * (1 - 0.4 * var(--agi-nav-progress)));
-  padding-bottom: calc(var(--agi-nav-pad, 18px) * (1 - 0.4 * var(--agi-nav-progress)));
+.navigation-root.navigation {
   transition: padding 0.2s ease;
 }
 
