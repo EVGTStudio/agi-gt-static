@@ -82,11 +82,33 @@
     }
   }
 
+  // --- Hauptüberschriften: sanftes Enthüllen ---
+  function setupHeadingReveal() {
+    if (!('IntersectionObserver' in window)) return; // altbrowser: alles normal sichtbar
+    document.documentElement.classList.add('agi-reveal-ready');
+    var headings = document.querySelectorAll('h1, h2:not(.agi-contact-title)');
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('agi-heading-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.35 }
+    );
+    headings.forEach(function (h) {
+      observer.observe(h);
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', cacheElements);
   window.addEventListener('load', function () {
     cacheElements();
     updateEffects();
     unlockTranslator();
+    setupHeadingReveal();
   });
   window.addEventListener('resize', cacheElements, { passive: true });
   window.addEventListener('scroll', updateEffects, { passive: true });
